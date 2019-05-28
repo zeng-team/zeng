@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 is_tuple = ("张三",18,1.75)
 
 print(is_tuple[1])

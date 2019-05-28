@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 name_list = ["ps","ss","op"]
 # 直接输出列表中相应位置的数
 print(name_list[2])

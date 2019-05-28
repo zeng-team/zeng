@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 dife = "hello word"
 print(len(dife))
 
@@ -34,7 +35,7 @@ for poem_str in poem:
 #   print("|%s|" % poem_str.rjust(12, "　")) # 向右对齐
 
 # strip方法可以去除字符串中的空白字符
-    print("|%s|" % poem_str.strip().center(12,"　"))
+    print("|%s|" % poem_str.strip().center(12," "))
 
 
 

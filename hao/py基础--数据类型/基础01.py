@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 deg = 1
 while deg <= 100:
     if deg >= 30 and deg <= 50:
