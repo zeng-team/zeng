@@ -1,0 +1,155 @@
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.turntable-wrap {
+    position: relative;
+    margin: 50px auto;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    border: 7px solid #ccc;
+    box-shadow: 1px 1px 16px;
+}
+
+.turntable-wrap .light {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #e85327;
+}
+
+.turntable-wrap .light span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 10px;
+    height: 100%;
+    transform-origin: center center;
+}
+
+.turntable-wrap .light span:before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+@keyframes white-to-yellow {
+    0% {
+      background: #fff;
+    }
+    100% {
+      background: #eee327;
+    }
+}
+
+.turntable-wrap .light span:nth-of-type(even):before {
+    background: #fff;
+    animation: white-to-yellow 1s linear infinite;
+}
+
+.turntable-wrap .light span:nth-of-type(odd):before {
+    background: #eee327;
+    animation: white-to-yellow 1s linear reverse infinite;
+}
+
+.turntable-wrap .turntable {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 310px;
+    height: 310px;
+    border-radius: 50%;
+}
+
+.turntable-wrap .turntable .bg {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border: 1px solid #dfd8be;
+    border-radius: 50%;
+}
+
+.turntable-wrap .turntable .bg li {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 1px;
+    height: 100%;
+    background: #dfd8be;
+    transform-origin: center center;
+}
+
+.turntable-wrap .turntable .gift {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(15deg);
+}
+
+.turntable-wrap .turntable .gift li {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100px;
+    height: 100%;
+    transform-origin: center center;
+}
+
+.turntable-wrap .turntable .gift li span {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    display: block;
+    width: 50px;
+    height: 70px;
+    margin: auto;
+    transform: rotate(-15deg);
+    text-align: center;
+    line-height: 80px;
+    border-radius: 5px;
+    background: #f23c3c;
+    color: #fff;
+    font-size: 24px;
+}
+
+.turntable-wrap .turntable .gift li:not(.no-gift) span:before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: 50px;
+    height: 1px;
+    background: #fff;
+}
+
+.turntable-wrap .turntable .gift li.no-gift span {
+    background: #fff;
+    line-height: 70px;
+    color: #bfa74f;
+    font-size: 12px;
+}
