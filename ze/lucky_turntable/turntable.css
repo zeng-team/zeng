@@ -153,3 +153,37 @@ ul {
     color: #bfa74f;
     font-size: 12px;
 }
+
+.turntable-wrap .pointer {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: -23px auto;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #fff;
+    border: 5px solid #fff;
+    box-shadow: 0 0 0 5px #b9a046;
+    text-align: center;
+    line-height: 16px;
+    color: #b9a046;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.turntable-wrap .pointer:before {
+    content: '';
+    position: absolute;
+    top: -58px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 0;
+    border-style: solid;
+    border-color: transparent transparent #b9a046 transparent;
+    border-width: 25px 10px 25px 10px;
+}
