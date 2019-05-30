@@ -118,6 +118,7 @@ ul {
     width: 100px;
     height: 100%;
     transform-origin: center center;
+    font-size: 13px;
 }
 
 .turntable-wrap .turntable .gift li span {
