@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fillstyle</title>
+</head>
+<body>
+<canvas id="canvas" width="255px" height="255px"></canvas>
+<canvas id="canvas1" width="150px" height="150px"></canvas>
+
+<script>
+    var ctx = document.getElementById('canvas').getContext('2d');
+    var ctx1 = document.getElementById('canvas1').getContext('2d');
+
+    for (var i = 0; i < 255; i++) {
+        for (var j = 0; j < 255; j++) {
+            ctx.fillStyle = 'rgb(' + i + ',' + j + ',25)';//填充颜色
+            ctx.fillRect(i, j, 1, 1);//填充矩形
+        }
+    }
+
+    for (var i = 0; i < 6; i++) {
+        for (var j = 0; j < 6; j++) {
+            ctx1.strokeStyle = 'rgb(155,' + Math.floor(255 - 42.5 * j) + ',' + Math.floor(255 - 42.5 * i) + ')';//边框颜色
+            ctx1.beginPath();
+            ctx1.arc(12.5 + i * 25, 12.5 + j * 25, 10, 0, Math.PI * 2, true); //逆时针画圆圈
+            ctx1.stroke();
+        }
+    }
+</script>
+</body>
+</html>
