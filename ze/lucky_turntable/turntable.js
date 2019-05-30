@@ -55,11 +55,6 @@ var turntable = {
     isGoing: false, //转盘是否开始
     result: null,//中奖结果
     init: function () {
-        var proList = [];
-        for (var i = 1; i <= 100; i++) {
-            proList.push(i);
-        }
-        proList.shuffle();//产生一个随机排序的1-100的数组
         //初始化灯泡
         var lightFragment = document.createDocumentFragment();
         for (var i = 0; i < this.lightNum; i++) {
@@ -100,11 +95,15 @@ var turntable = {
     star: function () {
         if (this.isGoing) return;
         this.isGoing = true;
-
+        var proList = [];
+        for (var i = 1; i <= 100; i++) {
+            proList.push(i);
+        }
+        proList.shuffle();//产生一个随机排序的1-100的数组
         var ran = Math.ceil(Math.random() * 100); // 生成1-100的随机数
 
         for (var i = 0; i < this.itemNum.length; i++) {
-            if (this.itemNum[i].pro[0] <= ran && ran <= this.itemNum[i].pro[1]) {
+            if (this.itemNum[i].pro[0] <= proList[ran] && proList[ran] <= this.itemNum[i].pro[1]) {
                 var data = {
                     index: i,
                     prize: this.itemNum[i].prize
