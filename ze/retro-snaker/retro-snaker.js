@@ -52,7 +52,12 @@ Snaker.prototype.move = function () {
     var rect = new Rect(this.head.x, this.head.y, this.head.width, this.head.height, 'black');
     this.snakerList.splice(1, 0, rect);
 
-    //如果有吃到食物就增加一个方块，没有就蛇尾去掉一个方块
+    //如果有吃到食物就增加一个方块，并且生成新的食物，没有就蛇尾去掉一个方块,
+    if (isEat()) {
+        food = new Food();
+    } else {
+        this.snakerList.pop();
+    }
 
     //设置蛇头的运动方向，37 左，38 上，39 右，40 下
     switch (this.direction) {
@@ -72,10 +77,32 @@ Snaker.prototype.move = function () {
             break;
     }
 
+    //撞墙判断
+    if (this.head.x > canvas.width || this.head.x < 0 || this.head.y > canvas.height || this.head.y < 0) {
+        clearInterval(timer)
+    }
+
+    //撞自己判断，从1循环，避免跟头部比较
+    for (var i = 1; i < this.snakerList.length; i++) {
+        if (this.snakerList[i].x === this.head.x && this.snakerList[i].y === this.head.y) {
+            clearInterval(timer)
+        }
+    }
 };
 
 var snaker = new Snaker();
 snaker.draw();
+
+var food = new Food();
+console.log(food)
+
+// 定时器
+var timer = setInterval(function () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);//清空画布，然后重新绘制
+    snaker.draw();
+    snaker.move();
+    food.draw();
+}, 50)
 
 //构建食物对象
 function Food() {
@@ -84,8 +111,8 @@ function Food() {
     //设置食物随机出现的位置
     while (isOnSnaker) {//while循环，当isOnSnaker为true时再执行一次，比if好用
         isOnSnaker = false;
-        var x = random(0, canvas.width - 20);
-        var y = random(0, canvas.height - 20);
+        var x = parseInt(random(0, canvas.width - 10) / 10) * 10; //食物的坐标只能是十的倍数，不然随机出现的食物可能跟蛇头的坐标对应不上
+        var y = parseInt(random(0, canvas.height - 10) / 10) * 10;
         var rect = new Rect(x, y, 10, 10, 'red');
         for (var i = 0; i < snaker.snakerList.length; i++) {
             if (snaker.snakerList[i].x === rect.x && snaker.snakerList[i].y === rect.y) {
@@ -98,13 +125,46 @@ function Food() {
     return rect;
 }
 
-var food = new Food();
-food.draw();
-console.log(food)
+//键盘事件,if判断为了防止反方向
+document.onkeydown = function (e) {
+    var ev = e || window.event;
+    switch (ev.keyCode) {
+        case 37:
+            if (snaker.direction !== 39) {
+                snaker.direction = 37;
+            }
+            break;
+        case 38:
+            if (snaker.direction !== 40) {
+                snaker.direction = 38;
+            }
+            break;
+        case 39:
+            if (snaker.direction !== 37) {
+                snaker.direction = 39;
+            }
+            break;
+        case 40:
+            if (snaker.direction !== 38) {
+                snaker.direction = 40;
+            }
+            break;
+    }
+    ev.preventDefault();
+}
 
 //随机函数,获得[min,max]范围的值
 function random(min, max) {
     var range = max - min;
     var r = Math.random();
-    return Math.round(r*range+min);
+    return Math.round(r * range + min);
+}
+
+//判定吃到食物，即头部跟食物重合
+function isEat() {
+    if (snaker.head.x === food.x && snaker.head.y === food.y) {
+        return true;
+    } else {
+        return false;
+    }
 }
