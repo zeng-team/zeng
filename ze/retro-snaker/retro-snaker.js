@@ -1,3 +1,4 @@
+var grade = document.getElementById('grade');
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
@@ -55,6 +56,7 @@ Snaker.prototype.move = function () {
     //如果有吃到食物就增加一个方块，并且生成新的食物，没有就蛇尾去掉一个方块,
     if (isEat()) {
         food = new Food();
+        this.grade();
     } else {
         this.snakerList.pop();
     }
@@ -79,13 +81,15 @@ Snaker.prototype.move = function () {
 
     //撞墙判断
     if (this.head.x > canvas.width || this.head.x < 0 || this.head.y > canvas.height || this.head.y < 0) {
-        clearInterval(timer)
+        clearInterval(timer);
+        drawText('GAME OVER！你撞墙啦！！！')
     }
 
     //撞自己判断，从1循环，避免跟头部比较
     for (var i = 1; i < this.snakerList.length; i++) {
         if (this.snakerList[i].x === this.head.x && this.snakerList[i].y === this.head.y) {
-            clearInterval(timer)
+            clearInterval(timer);
+            drawText('GAME OVER！你撞自己啦！！！')
         }
     }
 };
@@ -94,7 +98,6 @@ var snaker = new Snaker();
 snaker.draw();
 
 var food = new Food();
-console.log(food)
 
 // 定时器
 var timer = setInterval(function () {
@@ -167,4 +170,17 @@ function isEat() {
     } else {
         return false;
     }
+}
+
+//蛇的分数，即蛇数组长度-初始长度
+Snaker.prototype.grade = function() {
+    grade.innerHTML = '分数：' + (this.snakerList.length - 4);
+};
+
+//绘制文本
+function drawText(text) {
+    ctx.font = '20px serif';
+    ctx.fillStyle = 'red'
+    var textWidth = parseInt(ctx.measureText(text).width);//预先获取文本宽度，然后做到居中
+    ctx.fillText(text, (canvas.width-textWidth)/2, (canvas.height-20)/2);
 }
