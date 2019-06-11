@@ -105,7 +105,7 @@ var timer = setInterval(function () {
     snaker.draw();
     snaker.move();
     food.draw();
-}, 50)
+}, 50);
 
 //构建食物对象
 function Food() {
