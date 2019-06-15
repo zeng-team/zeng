@@ -1,6 +1,16 @@
-var grade = document.getElementById('grade');
-var canvas = document.getElementById('canvas');
+var recordDom = getIdDom('record');
+var grade = getIdDom('grade');
+var clearRecord = getIdDom('clear-record');
+var startGame = getIdDom('start-game');
+var restart = getIdDom('restart');
+var canvas = getIdDom('canvas');
+var timer;
 var ctx = canvas.getContext('2d');
+
+//方便获取id元素
+function getIdDom(idName) {
+    return document.getElementById(idName)
+}
 
 //因为蛇跟食物都是方块构成，所以构造方块
 function Rect(x, y, w, h, color) {
@@ -35,6 +45,8 @@ function Snaker() {
     //设置头部跟整蛇数组为属性， 方便后续调用
     this.head = snakerList[0];
     this.snakerList = snakerList;
+    this.snakerGrade = 0;//分数
+    this.isFail = false;
 
     //初始运动方向,向右,相当于按下右方向键
     this.direction = 39;
@@ -79,33 +91,32 @@ Snaker.prototype.move = function () {
             break;
     }
 
+    function public(text) {
+        clearInterval(timer);
+        drawText(text)
+    }
+
     //撞墙判断
     if (this.head.x > canvas.width || this.head.x < 0 || this.head.y > canvas.height || this.head.y < 0) {
-        clearInterval(timer);
-        drawText('GAME OVER！你撞墙啦！！！')
+        this.record();
+        this.isFail = true;
+        public('GAME OVER！你撞墙啦！！！');
     }
 
     //撞自己判断，从1循环，避免跟头部比较
     for (var i = 1; i < this.snakerList.length; i++) {
         if (this.snakerList[i].x === this.head.x && this.snakerList[i].y === this.head.y) {
-            clearInterval(timer);
-            drawText('GAME OVER！你撞自己啦！！！')
+            this.record();
+            this.isFail = true;
+            public('GAME OVER！你撞自己啦！！！');
         }
     }
 };
-
+initRecord();
 var snaker = new Snaker();
 snaker.draw();
 
 var food = new Food();
-
-// 定时器
-var timer = setInterval(function () {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);//清空画布，然后重新绘制
-    snaker.draw();
-    snaker.move();
-    food.draw();
-}, 50);
 
 //构建食物对象
 function Food() {
@@ -174,13 +185,74 @@ function isEat() {
 
 //蛇的分数，即蛇数组长度-初始长度
 Snaker.prototype.grade = function() {
-    grade.innerHTML = '分数：' + (this.snakerList.length - 4);
+    this.snakerGrade = this.snakerList.length - 4;
+    grade.innerHTML = '分数：' + this.snakerGrade;
 };
+
+//本地存储记录
+Snaker.prototype.record = function () {
+    var record = localStorage.getItem('record');
+    if(record) {
+        if (this.snakerGrade > record){
+            recordDom.innerHTML = '最高记录：' + this.snakerGrade + ' 恭喜你破纪录啦！！！';
+            localStorage.setItem('record', this.snakerGrade);
+        } else {
+            recordDom.innerHTML = '最高记录：' + record + ' 很遗憾，你没有破纪录。。';
+        }
+    } else {
+        recordDom.innerHTML = '最高记录：' + this.snakerGrade + ' 恭喜你破纪录啦！！！';;
+        localStorage.setItem('record', this.snakerGrade);
+    }
+};
+
+//初始化记录
+function initRecord() {
+    var record = localStorage.getItem('record');
+    if(record) {
+        recordDom.innerHTML = '最高记录：' + record;
+    } else {
+      recordDom.innerHTML = '暂时没有最高记录'
+    }
+}
 
 //绘制文本
 function drawText(text) {
     ctx.font = '20px serif';
-    ctx.fillStyle = 'red'
+    ctx.fillStyle = 'red';
     var textWidth = parseInt(ctx.measureText(text).width);//预先获取文本宽度，然后做到居中
     ctx.fillText(text, (canvas.width-textWidth)/2, (canvas.height-20)/2);
 }
+
+//开始游戏
+startGame.onclick = function () {
+    if (snaker.isFail || timer) return;//如果在游戏中或者撞墙了，就直接返回，防止重复执行间隔函数
+    // 定时器
+    timer = setInterval(function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);//清空画布，然后重新绘制
+        snaker.draw();
+        snaker.move();
+        food.draw();
+        }, 50);
+};
+
+//重新开始
+restart.onclick = function () {
+    initRecord();
+    //重新构造出蛇跟食物
+    snaker = new Snaker();
+    snaker.draw();
+    food = new Food();
+    // 定时器
+    timer = setInterval(function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);//清空画布，然后重新绘制
+        snaker.draw();
+        snaker.move();
+        food.draw();
+        }, 50);
+};
+
+//清空本地存储记录
+clearRecord.onclick = function () {
+    localStorage.removeItem('record');
+    initRecord();
+};
