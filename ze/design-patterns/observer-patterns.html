@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>obsever-patterns</title>
+</head>
+<body>
+<script>
+    //最简单的观察者模式，全部信息都接受
+    let msgList = {};
+
+    msgList.eventList = []; //存放事件列表
+
+    msgList.listen = function (fn) {
+        this.eventList.push(fn);//监听事件列表
+    };
+
+    msgList.triger = function () {
+        for (var i = 0, fn; fn = this.eventList[i++];) {
+            fn.apply(this, arguments);
+        }
+    };
+
+    msgList.listen(function (name) {
+        console.log(`${name}收到你的消息`);
+    });
+
+    msgList.listen(function () {
+        console.log('哈哈哈');
+    });
+
+    msgList.triger('张三');
+    msgList.triger('李四');
+
+    //升级版观察者模式。既订阅自己感兴趣的消息
+    upMsgList = {};
+    upMsgList.eventList = {}
+</script>
+</body>
+</html>
